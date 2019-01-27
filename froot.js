@@ -12,7 +12,24 @@ var Garden;
 //game parts
 var box;
 
-
+//defining functions
+within = function(px, py, rectx1, recty1, rectx2, recty2) {
+  if(px >= rectx1 && px < rectx2 && py >= recty1 && py < recty2) {
+    return true;
+  }
+  return false;
+}
+fillGrid = function(rows, cols, els){
+  var retarr = [];
+  for(var i = 0; i < rows; i++) {
+    var temparr = [];
+    for(var j = 0; j < cols; j++){
+      temparr.push(els(i, j));
+    }
+    retarr.push(temparr);
+  }
+  return(retarr);
+}
 
 function setup() {
   W = windowWidth;
@@ -20,24 +37,11 @@ function setup() {
   createCanvas(W, H);
 
   //functions
-  within = function(px, py, rectx1, recty1, rectx2, recty2) {
-    if(px >= rectx1 && px < rectx2 && py >= recty1 && py < recty2) {
-      return true;
-    }
-    return false;
-  }
-  fillGrid = function(rows, cols, els){
-    var retarr = [];
-    for(var i = 0; i < this.cols; i++) {
-      var temparr = [];
-      for(var j = 0; j < this.rows; j++){
-        temparr.push(els(i, j));
-      }
-      retarr.push(temparr);
-    }
-    return(retarr);
-  }
-  functionOfGrid;
+
+
+
+
+  //functionOfGrid;
 
   //classes
   Garden = function(rows, columns, centerx, centery, borderthickness, insidethickness, highlightcolor, bordercolor, sidelength) {
@@ -52,15 +56,12 @@ function setup() {
       this.borderc = bc;
       this.sidelength = s;
 
-      var zero = function() {
-        return 0;
-      }
-      this.plants = fillGrid(this.rows, this.cols, zero);
+      this.plants = fillGrid(this.rows, this.cols, function(r,c) {return(0) });
     }
-    
+
     this.init(rows, columns, centerx, centery, borderthickness, insidethickness, highlightcolor, bordercolor, sidelength);
 
-    this.render = function(mX, mY) {
+    this.gridrender = function(mX, mY) {
       var tl = [this.cx - this.cols * this.sidelength / 2, this.cy - this.rows * this.sidelength / 2];
       var tr = [this.cx + this.cols * this.sidelength / 2, this.cy - this.rows * this.sidelength / 2];
       var bl = [this.cx - this.cols * this.sidelength / 2, this.cy + this.rows * this.sidelength / 2];
@@ -96,11 +97,17 @@ function setup() {
 
 
     }
+    this.plantrender = function() {
+      return "hi"
+    }
+    this.plant = function(r, c, plant) {
+      this.plants[r][c] = plant;
+    }
   }
 
 
   box = new Garden(5, 5, W/2, H/2, 5, 2, color(100), color(0), 50);
-  console.log(box.plants);
+
 
 
 }
@@ -108,5 +115,5 @@ function setup() {
 
 function draw() {
   background(40);
-  box.render(mouseX, mouseY);
+  box.gridrender(mouseX, mouseY);
 }
